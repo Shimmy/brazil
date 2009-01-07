@@ -4,7 +4,7 @@ class Activity < ActiveRecord::Base
   STATE_DEPLOYED = 'deployed'
   
   belongs_to :app
-  has_many :version
+  has_many :versions
   has_many :changes, :order => "created_at DESC"
   
   has_many :db_instance_activity
@@ -12,17 +12,25 @@ class Activity < ActiveRecord::Base
   
   validates_associated :db_instances
   validates_presence_of :name
+
+  named_scope :latest, lambda { |limit| {:order => 'updated_at DESC', :limit => limit} }
   
   def development?
     (state == Activity::STATE_DEVELOPMENT)
   end
   
- def db_instance_dev
-    db_instances.each do |db_instance|
-      return db_instance if db_instance.dev?
-    end
+  def versioned?
+    (state == Activity::STATE_VERSIONED)
   end
-  
+   
+  def versioned!
+    update_attribute(:state, STATE_VERSIONED)
+  end
+
+  def deployed!
+    update_attribute(:state, STATE_DEPLOYED)
+  end
+    
   def to_s
     name
   end

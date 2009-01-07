@@ -2,8 +2,8 @@
 module ApplicationHelper
   def generate_title(crumbs)
     title = ''
-    crumbs.each do |crumb|
-      title += crumb.first
+    crumbs[1..-1].each do |crumb|
+      title += crumb.first.to_s
       unless crumb == crumbs.last
         title += ' > '
       end

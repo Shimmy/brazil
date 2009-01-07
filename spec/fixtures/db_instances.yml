@@ -1,0 +1,34 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+dev_1:
+  id: 1
+  db_alias: 'Dev 1'
+  host: dev1.db.example.com
+  port: 3307
+  db_env: dev
+  db_type: MySQL
+
+test_1:
+  id: 2
+  db_alias: 'Test 1'
+  host: test1.db.example.com
+  port: 3306
+  db_env: test
+  db_type: MySQL
+
+dev_2:
+  id: 4
+  db_alias: 'Dev 2'
+  host: dev2.db.example.com
+  port: 3307
+  db_env: dev
+  db_type: MySQL
+
+test_2:
+  id: 5
+  db_alias: 'Test 2'
+  host: test2.db.example.com
+  port: 3409
+  db_env: test
+  db_type: MySQL
+
