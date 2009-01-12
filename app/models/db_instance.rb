@@ -21,8 +21,8 @@ class DbInstance < ActiveRecord::Base
   end
   
   def self.db_types
-    [TYPE_MYSQL] # TODO: Only MySQL supported implemented for now
-    # [TYPE_MYSQL, TYPE_ODBC, TYPE_ORACLE, TYPE_POSTGRES, TYPE_SQLITE, TYPE_SQLITE3]
+    # TODO: Only MySQL and Oracle support implemented for now
+    [TYPE_MYSQL, TYPE_ORACLE] #, TYPE_ODBC, TYPE_POSTGRES, TYPE_SQLITE, TYPE_SQLITE3]
   end
   
   def dev?
@@ -41,13 +41,11 @@ class DbInstance < ActiveRecord::Base
     db_connection = nil
     begin
       db_connection = db_connection(username, password, schema)
-      db_connection['AutoCommit'] = false
       db_connection.transaction do |dbh|
         sql.strip.split(/;[\n\r]/s).each do |sql_part|
           dbh.do(sql_part.strip)
         end
       end
-      db_connection['AutoCommit'] = true
     rescue DBI::DatabaseError => exception
       raise Brazil::DBExecuteSQLException, exception.errstr
     ensure
@@ -100,10 +98,12 @@ class DbInstance < ActiveRecord::Base
     connection = nil
     case db_type
     when TYPE_MYSQL
-      connection = DBI.connect("DBI:Mysql:#{schema}:#{host}:#{port}", username, password)
-      connection.do('SET NAMES utf8')
+      connection = DBI.connect("DBI:Mysql:database=#{schema};host=#{host};port=#{port}", username, password)
+      connection.do('SET NAMES utf8') if connection
     # when TYPE_ODBC
-    # when TYPE_ORACLE
+    when TYPE_ORACLE
+      oracle_host, oracle_instance = host.split('/')
+      connection = DBI.connect("DBI:OCI8://#{oracle_host}:#{port}/#{oracle_instance}", username, password)
     # when TYPE_POSTGRES
     # when TYPE_SQLITE
     # when TYPE_SQLITE3

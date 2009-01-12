@@ -57,7 +57,7 @@ class Version < ActiveRecord::Base
   end
   
   def db_instance_test
-    test_db_instance = DbInstance.find(db_instance_ids, :conditions => {:db_env => DbInstance::ENV_TEST}).first
+    test_db_instance = DbInstance.find_all_by_id(db_instance_ids, :conditions => {:db_env => DbInstance::ENV_TEST}).first
     if test_db_instance
       test_db_instance
     else
@@ -82,7 +82,7 @@ class Version < ActiveRecord::Base
   end
    
   def states
-    ['created', 'tested', 'deployed']
+    [STATE_CREATED, STATE_TESTED, STATE_DEPLOYED]
   end
   
   def to_s
