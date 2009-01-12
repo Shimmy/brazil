@@ -1,5 +1,9 @@
 common:
   release_version: 1.2.3.2
+<<<<<<< HEAD:config/config.yml
+=======
+  
+>>>>>>> c4e19000765d3bca5f45f43d41c1bb63dbcf7633:config/config.yml
   release_name: 'Die Hard 2'
 
 production:
